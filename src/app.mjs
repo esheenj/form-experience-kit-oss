@@ -11,6 +11,7 @@ const summary = document.querySelector("#errors");
 const action = document.querySelector("#next");
 const back = document.querySelector("#back");
 const done = document.querySelector("#done");
+const reviewData = document.querySelector("#review-data");
 const draft = document.querySelector("#draft");
 const save = document.querySelector("#save");
 const restore = document.querySelector("#restore");
@@ -24,6 +25,18 @@ function draw({ focus = false } = {}) {
   }
   progress.textContent = state.complete ?
     "Completed fictional checklist" : `Step ${state.step + 1} of 3`;
+  reviewData.replaceChildren();
+  if (state.step === 2 && !state.complete) {
+    for (const [label, key] of [
+      ["Activity", "activity"], ["Supply", "supply"], ["Quantity", "quantity"]
+    ]) {
+      const term = document.createElement("dt");
+      term.textContent = label;
+      const description = document.createElement("dd");
+      description.textContent = state.values[key];
+      reviewData.append(term, description);
+    }
+  }
   summary.replaceChildren();
   if (state.errors.length) {
     const list = document.createElement("ul");
