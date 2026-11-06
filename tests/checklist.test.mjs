@@ -65,6 +65,13 @@ test("versioned export and strict restore recover fictional progress", () => {
   assert.throws(() => restoreChecklist(JSON.stringify({ ...JSON.parse(encoded), step: 9 })), FormFault);
   assert.throws(() => restoreChecklist(JSON.stringify({ ...JSON.parse(encoded), values: { activity: "X" } })), FormFault);
   assert.throws(() => restoreChecklist("x".repeat(2050)), FormFault);
+  const forged = JSON.parse(encoded);
+  forged.step = 2;
+  forged.values.activity = "";
+  assert.throws(() => restoreChecklist(JSON.stringify(forged)), FormFault);
+  forged.values.activity = "Invented afternoon";
+  forged.values.quantity = "40";
+  assert.throws(() => restoreChecklist(JSON.stringify(forged)), FormFault);
 });
 
 test("forged completed state and unknown fields cannot bypass checks", () => {
