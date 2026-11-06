@@ -71,5 +71,11 @@ export function restoreChecklist(json) {
     value.format !== "picnic-checklist-v1") throw new FormFault("Unsupported draft format");
   const restored = { step: value.step, values: value.values, complete: value.complete, errors: [] };
   verifyChecklist(restored);
+  if (restored.step >= 1 &&
+      validateStep({ ...restored, step: 0, complete: false }).length)
+    throw new FormFault("Draft cannot skip invalid first step");
+  if (restored.step >= 2 &&
+      validateStep({ ...restored, step: 1, complete: false }).length)
+    throw new FormFault("Draft cannot skip invalid second step");
   return { ...restored, values: { ...restored.values } };
 }
