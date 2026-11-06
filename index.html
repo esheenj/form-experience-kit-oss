@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Fictional Picnic Checklist — Form Experience Kit</title>
+  <style>
+    :root { color-scheme: light; font: 16px/1.55 system-ui,sans-serif; background:#f7f8fc; color:#182338 }
+    * { box-sizing:border-box }
+    body { margin:0; padding:1rem }
+    main { max-width:38rem; margin:1.5rem auto; padding:1.5rem; border:1px solid #cad2e2;
+      background:#fff; border-radius:1rem; box-shadow:0 6px 28px #1f315012 }
+    h1 { font-size:1.65rem; line-height:1.2 }
+    h2 { font-size:1.17rem }
+    label { display:block; margin:.4rem 0; font-weight:600 }
+    input,textarea { width:100%; padding:.8rem; font:inherit; border:1px solid #586881;
+      border-radius:.4rem }
+    input:focus-visible,textarea:focus-visible,button:focus-visible { outline:3px solid #0a62bc;
+      outline-offset:2px }
+    fieldset { border:0; margin:1rem 0; padding:0 }
+    [hidden] { display:none !important }
+    .actions { display:flex; flex-wrap:wrap; gap:.75rem; margin:1rem 0 }
+    button { min-height:44px; padding:.55rem 1rem; font:inherit; font-weight:650;
+      color:#fff; background:#174c98; border:0; border-radius:.4rem; cursor:pointer }
+    button:disabled { background:#718198; cursor:not-allowed }
+    #errors { color:#8c1830; font-weight:650 }
+    #errors:empty { display:none }
+    #progress { font-weight:700; color:#334c78 }
+    .muted { color:#455775 }
+    @media(max-width:360px) { main { padding:1rem } .actions button { flex:1 1 100% } }
+  </style>
+</head>
+<body>
+  <main>
+    <p class="muted">Original, offline, synthetic educational example</p>
+    <h1 id="form-title" tabindex="-1">Make a fictional picnic checklist</h1>
+    <p id="progress" role="status" aria-live="polite"></p>
+    <div id="errors" role="alert" tabindex="-1"></div>
+    <form id="picnic-form" novalidate>
+      <fieldset data-stage="0">
+        <legend><h2>Choose an imaginary activity</h2></legend>
+        <label for="activity">Activity name (3–80 characters)</label>
+        <input id="activity" name="activity" maxlength="100" autocomplete="off">
+      </fieldset>
+      <fieldset data-stage="1" hidden>
+        <legend><h2>Pick a fictional item</h2></legend>
+        <label for="supply">Supply name (2–60 characters)</label>
+        <input id="supply" name="supply" maxlength="100" autocomplete="off">
+        <label for="quantity">Quantity (1–20)</label>
+        <input id="quantity" name="quantity" type="number" min="1" max="20" step="1">
+      </fieldset>
+      <fieldset data-stage="2" hidden>
+        <legend><h2>Review the invented scenario</h2></legend>
+        <p>Review these fictional details before finishing, or go back to edit them.</p>
+        <dl id="review-data"></dl>
+      </fieldset>
+      <div class="actions">
+        <button type="button" id="back">Back</button>
+        <button type="submit" id="next">Continue</button>
+      </div>
+    </form>
+    <p id="done" role="status" tabindex="-1" hidden></p>
+    <hr>
+    <h2>Local draft export and restore</h2>
+    <p class="muted">Use made-up text only. The JSON below remains in this browser; it is never transmitted.</p>
+    <label for="draft">Versioned JSON draft</label>
+    <textarea id="draft" rows="5" spellcheck="false"></textarea>
+    <div class="actions">
+      <button type="button" id="save">Export draft</button>
+      <button type="button" id="restore">Restore draft</button>
+    </div>
+  </main>
+  <script type="module" src="./src/app.mjs"></script>
+</body>
+</html>
