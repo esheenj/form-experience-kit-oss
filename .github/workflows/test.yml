@@ -17,4 +17,5 @@ jobs:
         with:
           node-version: '22'
       - run: npm test
+      - run: node --check src/app.mjs
       - run: npm run demo
