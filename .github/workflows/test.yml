@@ -19,3 +19,17 @@ jobs:
       - run: npm test
       - run: node --check src/app.mjs
       - run: npm run demo
+
+  browser:
+    name: Real Chrome fictional form QA
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Install pinned test-only browser driver
+        run: python3 -m pip install -r tests/browser-requirements.txt
+      - name: Verify actual browser journey
+        run: python3 tests/browser_form.py
+

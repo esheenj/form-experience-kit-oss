@@ -1,0 +1,2 @@
+# Test-only browser automation; no runtime dependency or browser download.
+playwright==1.62.0
