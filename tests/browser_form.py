@@ -135,6 +135,35 @@ class BrowserFormTests(unittest.TestCase):
         expect(self.page.locator("#done")).to_contain_text("complete")
         expect(self.page.locator("#picnic-form")).to_be_hidden()
 
+    def test_local_file_roundtrip_and_invalid_import_preserve_current_state(self):
+        self.to_review()
+        self.page.locator("#save").click()
+        saved = self.page.locator("#draft").input_value()
+        with self.page.expect_download() as event:
+            self.page.locator("#download").click()
+        self.assertEqual(event.value.suggested_filename, "fictional-picnic-draft.json")
+        self.page.reload()
+        expect(self.page.locator("#progress")).to_have_text("Step 1 of 3")
+        self.page.locator("#file-draft").set_input_files({
+            "name": "fictional.json", "mimeType": "application/json",
+            "buffer": saved.encode("utf-8")
+        })
+        expect(self.page.locator("#progress")).to_have_text("Step 3 of 3")
+        self.assertEqual(self.page.locator("#draft").input_value(), saved)
+        expect(self.page.locator("#file-draft")).to_have_value("")
+        for bad in (b"{bad", b"X" * 2050, b'<script>window.injected=true</script>'):
+            with self.subTest(bad_size=len(bad)):
+                self.page.locator("#file-draft").set_input_files({
+                    "name": "invalid.json", "mimeType": "application/json", "buffer": bad
+                })
+                expect(self.page.locator("#errors")).to_be_focused()
+                expect(self.page.locator("#errors")).to_contain_text("unchanged")
+                expect(self.page.locator("#progress")).to_have_text("Step 3 of 3")
+                expect(self.page.locator("#file-draft")).to_have_value("")
+                self.page.locator("#save").click()
+                self.assertEqual(self.page.locator("#draft").input_value(), saved)
+                self.assertIsNone(self.page.evaluate("window.injected"))
+
     def test_review_renders_user_text_without_executing_markup(self):
         text = '<img src=x onerror="window.injected=true">'
         self.to_review(text)

@@ -68,7 +68,10 @@
     <div class="actions">
       <button type="button" id="save">Export draft</button>
       <button type="button" id="restore">Restore draft</button>
+      <button type="button" id="download">Download JSON file</button>
     </div>
+    <label for="file-draft">Restore from a local fictional JSON file (up to 2 KB)</label>
+    <input type="file" id="file-draft" accept=".json,application/json">
   </main>
   <script type="module" src="./src/app.mjs"></script>
 </body>
