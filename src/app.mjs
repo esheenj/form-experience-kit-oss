@@ -15,6 +15,8 @@ const reviewData = document.querySelector("#review-data");
 const draft = document.querySelector("#draft");
 const save = document.querySelector("#save");
 const restore = document.querySelector("#restore");
+const download = document.querySelector("#download");
+const fileDraft = document.querySelector("#file-draft");
 const heading = document.querySelector("#form-title");
 function draw({ focus = false } = {}) {
   steps.forEach(section => { section.hidden = state.complete ||
@@ -74,11 +76,37 @@ save.addEventListener("click", () => {
 });
 restore.addEventListener("click", () => {
   try {
-    state = restoreChecklist(draft.value);
+    const nextState = restoreChecklist(draft.value);
+    state = nextState;
     draw({ focus: true });
   } catch {
     summary.textContent = "The draft is invalid or from an unsupported version.";
     summary.focus();
+  }
+});
+download.addEventListener("click", () => {
+  const link = document.createElement("a");
+  link.href = "data:application/json;charset=utf-8," + encodeURIComponent(serializeChecklist(state));
+  link.download = "fictional-picnic-draft.json";
+  document.body.append(link);
+  link.click();
+  link.remove();
+});
+fileDraft.addEventListener("change", async event => {
+  const file = event.currentTarget.files?.[0];
+  if (!file) return;
+  try {
+    if (file.size > 2048) throw new Error("File exceeds the draft size limit.");
+    const text = await file.text();
+    const nextState = restoreChecklist(text);
+    state = nextState;
+    draft.value = text;
+    draw({ focus: true });
+  } catch {
+    summary.textContent = "The selected JSON file is invalid or from an unsupported version. The current draft is unchanged.";
+    summary.focus();
+  } finally {
+    fileDraft.value = "";
   }
 });
 draw();
