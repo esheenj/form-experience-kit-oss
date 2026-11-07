@@ -12,7 +12,7 @@ npm run demo
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Visit `http://127.0.0.1:8000` and try proceeding with an empty activity, correcting it, entering a fictional supply and quantity, returning to edit, reviewing and finishing. **Export draft** returns a versioned JSON string in the page, and **Restore draft** loads it back locally. No data leaves the browser.
+Visit `http://127.0.0.1:8000` and try proceeding with an empty activity, correcting it, entering a fictional supply and quantity, returning to edit, reviewing and finishing. **Export draft** returns a versioned JSON string in the page, and **Restore draft** loads it back locally. You can also **Download JSON file** and restore from a local `.json` file (maximum 2 KB). Malformed, oversized or unsupported drafts are rejected without changing the current checklist. All file handling stays in the browser; no data is uploaded.
 
 ## Modules
 
