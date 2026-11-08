@@ -33,6 +33,11 @@ jobs:
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          git fetch --no-tags origin main
+          test "$(git rev-parse origin/main)" = "$EXPECTED_SHA" || {
+            echo "::error::Newer main source exists; refusing stale Pages deployment."
+            exit 1
+          }
       - name: Confirm GitHub Pages is enabled for Actions
         env:
           GH_TOKEN: ${{ github.token }}
