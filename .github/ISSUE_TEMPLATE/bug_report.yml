@@ -1,0 +1,37 @@
+name: "Reproducible bug (fictional data)"
+description: Report a reproducible model or browser problem using only synthetic data
+title: "bug: "
+body:
+  - type: markdown
+    attributes:
+      value: "Thanks for contributing. Do not include real people, private client data, passwords, access tokens or hidden prompts."
+  - type: input
+    id: version
+    attributes:
+      label: Source revision and environment
+      description: Git commit SHA, Node version and browser where applicable
+      placeholder: "main @ commit SHA, Node 22, Chrome"
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Minimal fictional reproduction
+      description: Explicit steps or compact test code
+      placeholder: "1. Open ... 2. Enter 'Imaginary picnic' ... 3. Click ..."
+    validations:
+      required: true
+  - type: textarea
+    id: result
+    attributes:
+      label: Expected result and actual result
+      description: Separate expected behavior from what was observed
+    validations:
+      required: true
+  - type: textarea
+    id: tests
+    attributes:
+      label: Test evidence and limitations
+      description: Commands run, browser/focus behavior, and checks not performed
+    validations:
+      required: true
