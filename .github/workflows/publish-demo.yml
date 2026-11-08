@@ -1,0 +1,69 @@
+name: Publish CI-verified fictional form demo
+on:
+  workflow_run:
+    workflows: ["Verify fictional form journey"]
+    branches: [main]
+    types: [completed]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: public-form-pages
+  cancel-in-progress: false
+jobs:
+  pages:
+    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_repository.full_name == github.repository) }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - name: Checkout exact verified source
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          persist-credentials: false
+      - name: Check source identity and CI status
+        env:
+          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
+          if [[ "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
+            echo "::error::Dispatch requires a separately verified successful exact-HEAD CI; use the successful main push workflow_run instead."
+            exit 1
+          fi
+      - name: Confirm GitHub Pages is enabled for Actions
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          code="$(curl --silent --show-error --output /tmp/pages-status.json \
+            --write-out '%{http_code}' --header 'Accept: application/vnd.github+json' \
+            --header "Authorization: Bearer $GH_TOKEN" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/pages")"
+          if [[ "$code" != '200' ]]; then
+            echo "::error::GitHub Pages not verified (HTTP $code). Enable Settings > Pages > Source > GitHub Actions once."
+            exit 1
+          fi
+          test "$(jq -r '.build_type // "unknown"' /tmp/pages-status.json)" = 'workflow' || {
+            echo "::error::Pages source must be GitHub Actions.";
+            exit 1;
+          }
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Stage exact static browser files
+        run: node scripts/stage-pages.mjs dist/pages
+      - uses: actions/configure-pages@v5
+      - uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist/pages
+      - name: Publish only reviewed static source
+        id: deployment
+        uses: actions/deploy-pages@v4
