@@ -20,6 +20,8 @@ jobs:
       - run: npm test
       - run: node --check src/app.mjs
       - run: npm run demo
+      - name: Stage exact public static demo
+        run: node scripts/stage-pages.mjs dist/pages
 
   browser:
     name: Real Chrome fictional form QA
@@ -32,6 +34,10 @@ jobs:
           ref: ${{ github.event.pull_request.head.sha || github.sha }}
       - name: Install pinned test-only browser driver
         run: python3 -m pip install -r tests/browser-requirements.txt
-      - name: Verify actual browser journey
+      - name: Stage exact public static demo for browser QA
+        run: node scripts/stage-pages.mjs dist/pages
+      - name: Verify actual staged browser journey
+        env:
+          FORM_DEMO_ROOT: dist/pages
         run: python3 tests/browser_form.py
 
