@@ -45,6 +45,12 @@ those independently. Headless viewport checks do not establish physical-device,
 200% browser zoom, screen-reader, forced-colors or WCAG conformance; those remain
 open for independent QA in issue #2.
 
+## Developer contributions and deployment readiness
+
+This repo has a [five-minute contributor guide](CONTRIBUTING.md), [scoped fictional starter tasks](docs/GOOD_FIRST_ISSUES.md), a reproducible bug form and a focused pull request checklist. For behavior changes, include invalid input and repeatable browser/model evidence.
+
+The browser demo is **GitHub Pages deployment-ready**, not yet a confirmed hosted site: `node scripts/stage-pages.mjs dist/pages` builds a minimal, source-allowlisted artifact, and GitHub CI tests the **staged artifact** using real Chrome. [One-time Pages setup and live acceptance](docs/PAGES_RELEASE.md) explains how to enable GitHub Actions as the Pages source and confirm the actual HTTPS deployment. Do not use a guessed Pages URL or confuse green CI with live hosting.
+
 ## Limitations
 
 This is a teaching example, **not** production submission, accessibility certification or a persistent form service. Browser/screen-reader and physical device QA remain separate from the deterministic Node tests. The JSON draft is not encrypted and must not contain personal or confidential information. No telemetry, third-party packages, account APIs, payment flow or employer/customer material is included.
