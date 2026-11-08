@@ -4,7 +4,6 @@ on:
     workflows: ["Verify fictional form journey"]
     branches: [main]
     types: [completed]
-  workflow_dispatch:
 permissions:
   contents: read
 concurrency:
@@ -12,7 +11,7 @@ concurrency:
   cancel-in-progress: false
 jobs:
   pages:
-    if: ${{ github.event_name == 'workflow_dispatch' || (github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_repository.full_name == github.repository) }}
+    if: ${{ github.event.workflow_run.conclusion == 'success' && github.event.workflow_run.event == 'push' && github.event.workflow_run.head_repository.full_name == github.repository }}
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     permissions:
@@ -26,18 +25,14 @@ jobs:
       - name: Checkout exact verified source
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
-          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          ref: ${{ github.event.workflow_run.head_sha }}
           persist-credentials: false
       - name: Check source identity and CI status
         env:
-          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha || github.sha }}
+          EXPECTED_SHA: ${{ github.event.workflow_run.head_sha }}
         run: |
           set -euo pipefail
           test "$(git rev-parse HEAD)" = "$EXPECTED_SHA"
-          if [[ "${{ github.event_name }}" == 'workflow_dispatch' ]]; then
-            echo "::error::Dispatch requires a separately verified successful exact-HEAD CI; use the successful main push workflow_run instead."
-            exit 1
-          fi
       - name: Confirm GitHub Pages is enabled for Actions
         env:
           GH_TOKEN: ${{ github.token }}
