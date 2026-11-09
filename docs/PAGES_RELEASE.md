@@ -1,5 +1,7 @@
 # GitHub Pages — fictional form demo
 
+**Deployment status (9 November 2026):** [GitHub Actions run 42476107802](https://github.com/esheenj/form-experience-kit-oss/actions/runs/42476107802) successfully deployed this public-source Pages bundle to [https://esheenj.github.io/form-experience-kit-oss/](https://esheenj.github.io/form-experience-kit-oss/). That link comes from GitHub's actual deployment receipt, not a guess. Independent external HTTPS/browser acceptance remains pending.
+
 The original static form can be staged and tested without a subscription or runtime backend. **A public GitHub source repository does not itself prove a hosted Pages URL exists.**
 
 ## Local verification (no deployment)
