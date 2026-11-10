@@ -65,3 +65,9 @@ MIT-licensed educational source. The package is `private: true` to prevent accid
 Try the [fictional Onboarding Friction Lab](https://esheenj.github.io/form-experience-kit-oss/onboarding.html), a standalone original educational simulator hosted in this existing repository. It examines at most eight synthetic steps, estimated duration, early account gates and optional steps without skip paths. The immutable model lives in `src/onboarding.mjs` with explicit invalid input and misleading-policy tests. Its numerical thresholds and test suggestions are **heuristics, not measured conversion, genuine user research or accessibility certification**.
 
 `npm test` includes the pure model; exact source is staged into a static Pages allowlist, and real Chrome tests cover the hosted add-on. No new runtime dependencies, telemetry, accounts or online service. External hosted acceptance is a separate check from passing GitHub Actions.
+
+## Additional hosted tool: Consent Patterns Lab
+
+[Open the fictional Consent Patterns Lab](https://esheenj.github.io/form-experience-kit-oss/consent.html) to compare optional-by-default analytics/personalization choices, granular selection, decline and withdrawal in a deterministic local state machine. `src/consent.mjs` enforces an essential simulation field and bounded revisions, tested with forged states and unexpected action values; `src/consent-ui.mjs` uses native controls and renders status safely. Exact HTML/ESM files are allowlisted in the existing GitHub Pages stage and checked through real Chrome.
+
+**Not a consent-management product or legal compliance assessment.** No real tracking, cookies, persistence, customer records, upload, analytics, third-party scripts or runtime packages. This is an additional original tool inside the existing MIT public repo, not an additional independent repository.

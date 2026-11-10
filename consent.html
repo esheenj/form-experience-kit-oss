@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="color-scheme" content="light dark">
+<meta http-equiv="Content-Security-Policy" content="default-src 'none'; script-src 'self'; style-src 'unsafe-inline'; connect-src 'none'; img-src 'none'; object-src 'none'; form-action 'none'; base-uri 'none'">
+<meta name="description" content="Try fictional granular consent, optional opt-in and withdrawal with no cookies or tracking.">
+<title>Consent Patterns Lab · Esheen Labs</title>
+<style>
+:root{font:16px/1.55 system-ui,sans-serif;color-scheme:light dark}
+*{box-sizing:border-box}
+body{margin:0;background:Canvas;color:CanvasText}
+main{max-width:60rem;margin:auto;padding:clamp(1rem,4vw,3rem)}
+h1{font-size:clamp(2rem,5vw,3rem);line-height:1.1}
+p{max-width:65ch}
+a{color:LinkText}
+section{border:1px solid GrayText;border-radius:1rem;padding:clamp(1rem,3vw,1.6rem);margin:1rem 0}
+fieldset{border:0;padding:0}
+legend{font-size:1.35rem;font-weight:700}
+.choice{display:flex;gap:1rem;align-items:start;border-bottom:1px solid GrayText;padding:.8rem 0}
+.choice input{width:26px;height:26px;flex:none;margin-top:.35rem}
+.choice label{font-weight:700}
+.choice p{margin:.3rem 0}
+button{min-height:48px;padding:.65rem 1rem;background:Canvas;color:CanvasText;border:1px solid GrayText;border-radius:.6rem;font:inherit;cursor:pointer}
+.actions{display:flex;flex-wrap:wrap;gap:.7rem;margin:1rem 0}
+:focus-visible{outline:3px solid Highlight;outline-offset:3px}
+#status{font-weight:700}
+#status:focus{outline:3px solid Highlight}
+</style>
+<script type="module" src="./src/consent-ui.mjs"></script>
+</head><body><main>
+<p><a href="./">Back to Form Experience Kit</a></p>
+<p>Esheen Labs · fictional educational preferences</p>
+<h1>Make optional choices easy to change.</h1>
+<p>Compare granular opt-in, reject and withdraw patterns. This page has <strong>no analytics, cookies, preference storage or data transfer</strong>; it does not implement real-world consent management or guarantee legal compliance.</p>
+<section><fieldset><legend>Simulated preferences</legend>
+<div class="choice"><input id="necessary" type="checkbox" checked disabled aria-describedby="necessary-hint">
+<div><label for="necessary">Essential example functions</label><p id="necessary-hint">Fixed in this fictional model. Real legal classification depends on purpose and context.</p></div></div>
+<div class="choice"><input id="analytics" type="checkbox" aria-describedby="analytics-hint">
+<div><label for="analytics">Optional usage analytics</label><p id="analytics-hint">Simulation only; turning it on does not activate tracking.</p></div></div>
+<div class="choice"><input id="personalization" type="checkbox" aria-describedby="personal-hint">
+<div><label for="personalization">Optional personalization</label><p id="personal-hint">Simulation only; no profile is created or stored.</p></div></div>
+</fieldset>
+<div class="actions">
+<button id="accept" type="button">Accept optional</button>
+<button id="decline" type="button">Decline optional</button>
+<button id="withdraw" type="button">Withdraw optional</button>
+<button id="reset" type="button">Reset simulation</button>
+</div>
+<p id="status" role="status" aria-live="polite" tabindex="-1"></p></section>
+<section><h2>What this illustrates</h2><p>Optional choices default off, can be selected individually and can be withdrawn without changing essential model behavior. No persistent preference proof or regulatory assessment is provided. <a href="https://github.com/esheenj/form-experience-kit-oss">Review the model and tests</a>.</p></section>
+</main></body></html>

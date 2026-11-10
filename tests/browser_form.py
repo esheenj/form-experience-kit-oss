@@ -209,5 +209,29 @@ class BrowserFormTests(unittest.TestCase):
         self.assertLessEqual(self.page.evaluate("document.documentElement.scrollWidth"),320)
         self.assertIn("connect-src 'none'",self.page.locator('meta[http-equiv="Content-Security-Policy"]').get_attribute("content"))
 
+
+    def test_consent_simulator_defaults_withdraws_and_has_no_network(self):
+        self.page.goto(self.origin+"/consent.html")
+        expect(self.page.locator("#necessary")).to_be_checked()
+        expect(self.page.locator("#necessary")).to_be_disabled()
+        expect(self.page.locator("#analytics")).not_to_be_checked()
+        expect(self.page.locator("#personalization")).not_to_be_checked()
+        self.page.locator("#analytics").check()
+        expect(self.page.locator("#status")).to_contain_text("Optional analytics on")
+        expect(self.page.locator("#personalization")).not_to_be_checked()
+        self.page.locator("#accept").click()
+        expect(self.page.locator("#analytics")).to_be_checked()
+        expect(self.page.locator("#personalization")).to_be_checked()
+        self.page.locator("#withdraw").click()
+        expect(self.page.locator("#analytics")).not_to_be_checked()
+        expect(self.page.locator("#personalization")).not_to_be_checked()
+        expect(self.page.locator("#necessary")).to_be_checked()
+        expect(self.page.locator("#status")).to_be_focused()
+        self.page.locator("#reset").click()
+        expect(self.page.locator("#analytics")).to_be_focused()
+        self.page.set_viewport_size({"width":320,"height":720})
+        self.assertLessEqual(self.page.evaluate("document.documentElement.scrollWidth"),320)
+        self.assertIn("connect-src 'none'",self.page.locator('meta[http-equiv="Content-Security-Policy"]').get_attribute("content"))
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

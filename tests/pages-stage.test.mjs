@@ -16,7 +16,7 @@ test("stages the precise runnable synthetic ESM browser demo with no hidden file
   assert.equal(receipt.state,"STAGED_ONLY");
   assert.equal(receipt.publicUrlVerified,false);
   assert.deepEqual(receipt.files.map(x=>x.path),[
-    ".nojekyll","index.html","onboarding.html","src/app.mjs","src/checklist.mjs","src/onboarding-ui.mjs","src/onboarding.mjs"
+    ".nojekyll","consent.html","index.html","onboarding.html","src/app.mjs","src/checklist.mjs","src/consent-ui.mjs","src/consent.mjs","src/onboarding-ui.mjs","src/onboarding.mjs"
   ]);
   for(const entry of receipt.files){
     assert.match(entry.sha256,/^[a-f0-9]{64}$/);
