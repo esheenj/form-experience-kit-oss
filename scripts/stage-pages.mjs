@@ -7,7 +7,7 @@ import {createHash} from "node:crypto";
 
 const ROOT=fileURLToPath(new URL("../",import.meta.url));
 const SOURCES=Object.freeze([
-  "index.html","src/app.mjs","src/checklist.mjs"
+  "index.html","onboarding.html","src/app.mjs","src/checklist.mjs","src/onboarding.mjs","src/onboarding-ui.mjs"
 ]);
 function fail(reason){throw new Error("FORM_PAGES_STAGE_"+reason);}
 async function checkRegular(root,relative){
@@ -52,6 +52,11 @@ export async function stagePages(outputPath){
     const adapter=await readFile(join(out,"src/app.mjs"),"utf8");
     if(!index.includes('src="./src/app.mjs"') ||
        !adapter.includes('from "./checklist.mjs"'))fail("MODULE_REFERENCE");
+    const addOn=await readFile(join(out,"onboarding.html"),"utf8");
+    const addOnUI=await readFile(join(out,"src/onboarding-ui.mjs"),"utf8");
+    if(!index.includes("onboarding.html")||!addOn.includes("./src/onboarding-ui.mjs")||
+       !addOnUI.includes("./onboarding.mjs")||!addOn.includes("connect-src 'none'"))
+      fail("ONBOARDING_OFFLINE_LINK");
     const files=[];
     for(const path of actual){
       const bytes=await readFile(join(out,path));
