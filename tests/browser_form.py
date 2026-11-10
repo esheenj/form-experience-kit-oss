@@ -187,9 +187,9 @@ class BrowserFormTests(unittest.TestCase):
 
     def test_offline_onboarding_lab_flags_and_inert_user_text(self):
         self.page.goto(self.origin+"/onboarding.html")
-        expect(self.page.locator("#status")).to_have_text("3 heuristic flags for 3 fictional steps.")
+        expect(self.page.locator("#status")).to_have_text("4 heuristic flags for 3 fictional steps.")
         expect(self.page.locator("#duration")).to_have_text("210 estimated seconds")
-        self.assertEqual(self.page.locator("#flags li").count(),3)
+        self.assertEqual(self.page.locator("#flags li").count(),4)
         self.page.locator("#input").evaluate("""el=>{
           const x=JSON.parse(el.value);
           x[0].title='<img src=x onerror=alert(1)>';
@@ -197,7 +197,7 @@ class BrowserFormTests(unittest.TestCase):
           el.value=JSON.stringify(x);
         }""")
         self.page.locator("#review").click()
-        expect(self.page.locator("#status")).to_have_text("4 heuristic flags for 3 fictional steps.")
+        expect(self.page.locator("#status")).to_have_text("5 heuristic flags for 3 fictional steps.")
         self.assertEqual(self.page.locator("#flags img").count(),0)
         self.page.locator("#input").fill('[{"id":"bad","title":"X","seconds":-1}]')
         self.page.locator("#review").click()
