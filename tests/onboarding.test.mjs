@@ -9,8 +9,8 @@ const sample=()=>[
 test("returns explainable offline warnings, never fake observed conversion",()=>{
  const x=sample(),r=inspectOnboarding(x);
  assert.equal(r.estimatedSeconds,210);
- assert.equal(r.flagCount,3);
- assert.deepEqual(r.flags.map(f=>f.code),["LONG_STEP","OPTIONAL_NOT_SKIPPABLE","LONG_JOURNEY"]);
+ assert.equal(r.flagCount,4);
+ assert.deepEqual(r.flags.map(f=>f.code),["LONG_STEP","EARLY_ACCOUNT_GATE","OPTIONAL_NOT_SKIPPABLE","LONG_JOURNEY"]);
  assert.equal(r.measuredConversion,false);
  assert.equal(r.actualUsabilityEvidence,false);
  assert.deepEqual(x,sample());
