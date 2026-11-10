@@ -7,7 +7,7 @@ import {createHash} from "node:crypto";
 
 const ROOT=fileURLToPath(new URL("../",import.meta.url));
 const SOURCES=Object.freeze([
-  "index.html","onboarding.html","src/app.mjs","src/checklist.mjs","src/onboarding.mjs","src/onboarding-ui.mjs"
+  "index.html","onboarding.html","consent.html","src/app.mjs","src/checklist.mjs","src/onboarding.mjs","src/onboarding-ui.mjs","src/consent.mjs","src/consent-ui.mjs"
 ]);
 function fail(reason){throw new Error("FORM_PAGES_STAGE_"+reason);}
 async function checkRegular(root,relative){
@@ -57,6 +57,11 @@ export async function stagePages(outputPath){
     if(!index.includes("onboarding.html")||!addOn.includes("./src/onboarding-ui.mjs")||
        !addOnUI.includes("./onboarding.mjs")||!addOn.includes("connect-src 'none'"))
       fail("ONBOARDING_OFFLINE_LINK");
+    const consent=await readFile(join(out,"consent.html"),"utf8");
+    const consentUI=await readFile(join(out,"src/consent-ui.mjs"),"utf8");
+    if(!index.includes("consent.html")||!consent.includes("./src/consent-ui.mjs")||
+       !consentUI.includes("./consent.mjs")||!consent.includes("connect-src 'none'"))
+      fail("CONSENT_OFFLINE_LINK");
     const files=[];
     for(const path of actual){
       const bytes=await readFile(join(out,path));
