@@ -59,3 +59,9 @@ This is a teaching example, **not** production submission, accessibility certifi
 
 MIT-licensed educational source. The package is `private: true` to prevent accidental npm publication. Contributions should be original and synthetic.
 
+
+## Additional offline browser tool: Onboarding Friction Lab
+
+Try the [fictional Onboarding Friction Lab](https://esheenj.github.io/form-experience-kit-oss/onboarding.html), a standalone original educational simulator hosted in this existing repository. It examines at most eight synthetic steps, estimated duration, early account gates and optional steps without skip paths. The immutable model lives in `src/onboarding.mjs` with explicit invalid input and misleading-policy tests. Its numerical thresholds and test suggestions are **heuristics, not measured conversion, genuine user research or accessibility certification**.
+
+`npm test` includes the pure model; exact source is staged into a static Pages allowlist, and real Chrome tests cover the hosted add-on. No new runtime dependencies, telemetry, accounts or online service. External hosted acceptance is a separate check from passing GitHub Actions.
