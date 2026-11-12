@@ -1,6 +1,10 @@
 # Form Experience Kit
 
-**[Open the GitHub-deployed fictional multistep form](https://esheenj.github.io/form-experience-kit-oss/)** — [GitHub Pages deployment](https://github.com/esheenj/form-experience-kit-oss/actions/runs/42476107802) succeeded on **9 November 2026**. Independent external HTTPS/browser verification is still pending; please report any rendering problems in GitHub Issues.
+**Explore the Esheen Labs gallery:** [Try 28 open-source browser demos and developer playgrounds](https://esheenj.github.io/compound-intelligence-starter/) across seven independent public repositories, including AI agent experiments, UX patterns and tooling. They use fictional examples; 28 demos does **not** mean 28 separate repositories.
+
+**Who this is for:** Experience multi-step forms, helpful errors and local draft recovery.
+
+**[Open the GitHub-deployed fictional multistep form](https://esheenj.github.io/form-experience-kit-oss/)** — [GitHub Pages deployment](https://github.com/esheenj/form-experience-kit-oss/actions/runs/42476107802) succeeded on **9 November 2026**. The seven-project collection separately passed a bounded independent public HTTPS Chrome check on 11 November 2026 ([acceptance evidence](https://github.com/esheenj/compound-intelligence-starter/actions/runs/43064815195)); physical-device and assistive-technology acceptance are not claimed.
 
 An original, **offline educational three-step form** showing validation, back navigation, progress, a final review and versioned JSON draft export/restore. Built around a wholly fictional picnic checklist, not a real application or client form.
 
