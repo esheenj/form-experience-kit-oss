@@ -1,4 +1,9 @@
-# Form Experience Kit
+# Form Experience Patterns
+
+**Product identity:** **Form Experience Patterns** is the public display name of the existing **Form Experience Kit** open-source reference. It demonstrates a fictional three-step form with validation, back navigation, keyboard focus, final review and local JSON draft export/restore.
+
+**For:** UX engineers, frontend developers and product teams seeking inspectable interaction examples for multi-step forms. **Output:** a working browser demonstration and deterministic model tests. This is not a hosted form builder, real customer data collection service, complete accessibility certification or production CRM integration. The existing repository slug, package, source API and demo URL remain unchanged.
+
 
 **Support this open-source project (optional):** [Esheen Labs crypto support](https://esheenj.github.io/compound-intelligence-starter/support.html) accepts maintainer-supplied BTC on Bitcoin and USDT on Solana, Ethereum/ERC-20 or Tron/TRC-20. The destination addresses are **custodial Pionex exchange deposits** and may change; check the exact network, current address and minimum before sending. Contributions do not buy priority, access or execution authority. All demos and source remain free.
 
