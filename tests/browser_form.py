@@ -164,6 +164,43 @@ class BrowserFormTests(unittest.TestCase):
                 self.assertEqual(self.page.locator("#draft").input_value(), saved)
                 self.assertIsNone(self.page.evaluate("window.injected"))
 
+    def test_exact_file_byte_limit_and_recoverable_size_error(self):
+        # Valid JSON plus legal whitespace exercises file bytes, not JSON syntax.
+        self.to_review("Imaginary café picnic")
+        self.page.locator("#save").click()
+        saved = self.page.locator("#draft").input_value()
+        raw = saved.encode("utf-8")
+        self.assertGreater(len(raw), len(saved), "Fixture must contain multibyte UTF-8")
+        exact = raw + b" " * (2048 - len(raw))
+        self.assertEqual(len(exact), 2048)
+        self.page.reload()
+        self.page.locator("#file-draft").set_input_files({
+            "name": "exact.json", "mimeType": "application/json", "buffer": exact
+        })
+        expect(self.page.locator("#progress")).to_have_text("Step 3 of 3")
+        expect(self.page.locator("#review-data")).to_contain_text("Imaginary café picnic")
+        expect(self.page.locator("#file-draft")).to_have_value("")
+        for contents, message in ((exact + b" ", "2,048-byte limit"),
+                                  (b"{" + b" " * 2047, "invalid or from an unsupported version")):
+            with self.subTest(bytes=len(contents)):
+                self.page.locator("#file-draft").set_input_files({
+                    "name": "retry.json", "mimeType": "application/json", "buffer": contents
+                })
+                expect(self.page.locator("#errors")).to_be_focused()
+                expect(self.page.locator("#errors")).to_contain_text(message)
+                expect(self.page.locator("#errors")).to_contain_text("unchanged")
+                expect(self.page.locator("#file-draft")).to_have_value("")
+                expect(self.page.locator("#progress")).to_have_text("Step 3 of 3")
+                self.page.locator("#save").click()
+                self.assertEqual(self.page.locator("#draft").input_value(), saved)
+        # A new selection can immediately recover after either rejection.
+        self.page.locator("#file-draft").set_input_files({
+            "name": "retry.json", "mimeType": "application/json", "buffer": exact
+        })
+        expect(self.page.locator("#errors")).to_be_empty()
+        expect(self.page.locator("#form-title")).to_be_focused()
+        expect(self.page.locator("#file-draft")).to_have_value("")
+
     def test_review_renders_user_text_without_executing_markup(self):
         text = '<img src=x onerror="window.injected=true">'
         self.to_review(text)
@@ -235,3 +272,4 @@ class BrowserFormTests(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main(verbosity=2)
+
