@@ -96,7 +96,11 @@ fileDraft.addEventListener("change", async event => {
   const file = event.currentTarget.files?.[0];
   if (!file) return;
   try {
-    if (file.size > 2048) throw new Error("File exceeds the draft size limit.");
+    if (file.size > 2048) {
+      summary.textContent = "The selected file exceeds the 2,048-byte limit. Choose a smaller fictional JSON draft. The current draft is unchanged.";
+      summary.focus();
+      return;
+    }
     const text = await file.text();
     const nextState = restoreChecklist(text);
     state = nextState;
@@ -110,3 +114,4 @@ fileDraft.addEventListener("change", async event => {
   }
 });
 draw();
+
