@@ -27,7 +27,7 @@ npm run demo
 python3 -m http.server 8000 --bind 127.0.0.1
 ```
 
-Visit `http://127.0.0.1:8000` and try proceeding with an empty activity, correcting it, entering a fictional supply and quantity, returning to edit, reviewing and finishing. **Export draft** returns a versioned JSON string in the page, and **Restore draft** loads it back locally. You can also **Download JSON file** and restore from a local `.json` file (maximum 2 KB). Malformed, oversized or unsupported drafts are rejected without changing the current checklist. All file handling stays in the browser; no data is uploaded.
+Visit `http://127.0.0.1:8000` and try proceeding with an empty activity, correcting it, entering a fictional supply and quantity, returning to edit, reviewing and finishing. **Export draft** returns a versioned JSON string in the page, and **Restore draft** loads it back locally. You can also **Download JSON file** and restore from a local `.json` file (maximum 2,048 bytes, inclusive). Files above that byte limit receive a specific smaller-file instruction; malformed or unsupported drafts receive a format error. Rejections preserve the current checklist and reset the file selector for retry. All file handling stays in the browser; no data is uploaded.
 
 ## Modules
 
@@ -51,7 +51,7 @@ The test starts a temporary loopback server and an isolated headless browser,
 prints the observed browser version and fails on unexpected external requests
 or page errors. It covers actual Tab/Enter input, error-summary focus, hidden
 steps, invalid quantities, back navigation, JSON restore, rejected/inert markup,
-completion and layout at 320/375/812/1440px. The existing PR workflow runs both
+completion and layout at 320/375/812/1440px. Synthetic UTF-8 file fixtures cover valid 2,048-byte JSON, 2,049-byte rejection, malformed exact-limit JSON, unchanged progress and successful retry. The existing PR workflow runs both
 the Node model tests and this browser regression.
 
 Alternative hypothesis being checked: a passing model can still hide a broken
@@ -84,3 +84,4 @@ Try the [fictional Onboarding Friction Lab](https://esheenj.github.io/form-exper
 [Open the fictional Consent Patterns Lab](https://esheenj.github.io/form-experience-kit-oss/consent.html) to compare optional-by-default analytics/personalization choices, granular selection, decline and withdrawal in a deterministic local state machine. `src/consent.mjs` enforces an essential simulation field and bounded revisions, tested with forged states and unexpected action values; `src/consent-ui.mjs` uses native controls and renders status safely. Exact HTML/ESM files are allowlisted in the existing GitHub Pages stage and checked through real Chrome.
 
 **Not a consent-management product or legal compliance assessment.** No real tracking, cookies, persistence, customer records, upload, analytics, third-party scripts or runtime packages. This is an additional original tool inside the existing MIT public repo, not an additional independent repository.
+
