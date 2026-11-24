@@ -62,8 +62,23 @@ jobs:
         run: node scripts/stage-pages.mjs dist/pages
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v4
+        id: pages-artifact
         with:
           path: dist/pages
+          name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
+      - name: Allow uploaded artifact metadata to propagate
+        env:
+          ARTIFACT_ID: ${{ steps.pages-artifact.outputs.artifact_id }}
+        run: |
+          set -euo pipefail
+          [[ "$ARTIFACT_ID" =~ ^[0-9]+$ ]] || {
+            echo "::error::Upload returned no artifact identity; refusing deployment."
+            exit 1
+          }
+          echo "Uploaded artifact $ARTIFACT_ID; allowing 10 seconds for metadata visibility."
+          sleep 10
       - name: Publish only reviewed static source
         id: deployment
         uses: actions/deploy-pages@v4
+        with:
+          artifact_name: github-pages-${{ github.run_id }}-${{ github.run_attempt }}
