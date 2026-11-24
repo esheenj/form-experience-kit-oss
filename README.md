@@ -51,7 +51,7 @@ The test starts a temporary loopback server and an isolated headless browser,
 prints the observed browser version and fails on unexpected external requests
 or page errors. It covers actual Tab/Enter input, error-summary focus, hidden
 steps, invalid quantities, back navigation, JSON restore, rejected/inert markup,
-completion and layout at 320/375/812/1440px. Synthetic UTF-8 file fixtures cover valid 2,048-byte JSON, 2,049-byte rejection, malformed exact-limit JSON, unchanged progress and successful retry. The existing PR workflow runs both
+completion and layout at 320/375/812/1440px. Synthetic UTF-8 file fixtures cover valid 2,048-byte JSON, 2,049-byte rejection, malformed exact-limit JSON, unchanged progress and successful retry. The browser regression also exercises maximum valid unbroken activity/supply values on review and completion at those widths, preserving exact text without clipping or ellipsis. The existing PR workflow runs both
 the Node model tests and this browser regression.
 
 Alternative hypothesis being checked: a passing model can still hide a broken
