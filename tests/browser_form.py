@@ -208,6 +208,48 @@ class BrowserFormTests(unittest.TestCase):
         self.assertEqual(self.page.locator("#review-data img").count(), 0)
         self.assertIsNone(self.page.evaluate("window.injected"))
 
+    def test_maximum_unbroken_values_reflow_without_losing_text(self):
+        # Accepted input can be much wider than the empty first-step fixture.
+        activity, supply = "A" * 80, "S" * 60
+        for width, height in ((320, 640), (375, 812), (812, 375), (1440, 900)):
+            self.page.goto(self.origin)
+            self.page.set_viewport_size({"width": width, "height": height})
+            self.page.locator("#activity").fill(activity)
+            self.page.locator("#next").click()
+            self.page.locator("#supply").fill(supply)
+            self.page.locator("#quantity").fill("20")
+            self.page.locator("#next").click()
+            for phase in ("review", "complete"):
+                with self.subTest(width=width, phase=phase):
+                    if phase == "review":
+                        expect(self.page.locator("#progress")).to_have_text("Step 3 of 3")
+                        self.assertEqual(self.page.locator("#review-data dd").all_text_contents(),
+                                         [activity, supply, "20"])
+                        targets = ("#review-data", "#next", "#back")
+                    else:
+                        expect(self.page.locator("#done")).to_have_text(
+                            f"Your fictional {activity} checklist is complete.")
+                        targets = ("#done",)
+                    size = self.page.evaluate("""() => ({
+                        scroll:document.documentElement.scrollWidth, viewport:innerWidth
+                    })""")
+                    self.assertLessEqual(size["scroll"], size["viewport"] + 1,
+                                         f"Horizontal overflow: {size}")
+                    for selector in targets:
+                        box = self.page.locator(selector).bounding_box()
+                        self.assertIsNotNone(box)
+                        self.assertGreaterEqual(box["x"], 0)
+                        self.assertLessEqual(box["x"] + box["width"], width + 1)
+                    # No clipping/ellipsis may hide accepted text to make the test pass.
+                    selector = "#review-data dd" if phase == "review" else "#done"
+                    self.assertTrue(self.page.locator(selector).evaluate_all("""els => els.every(el => {
+                        const css=getComputedStyle(el);
+                        return css.overflowX === 'visible' && css.textOverflow !== 'ellipsis'
+                               && el.scrollWidth <= el.clientWidth + 1;
+                    })"""))
+                if phase == "review":
+                    self.page.locator("#next").click()
+
     def test_visible_controls_fit_small_portrait_and_landscape_viewports(self):
         for width, height in ((320, 640), (375, 812), (812, 375), (1440, 900)):
             with self.subTest(width=width, height=height):
